@@ -1,0 +1,993 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5"><title>千锋课程————路由交换原理及计算机网络 | Fervidity Sec</title><meta name="description" content="千锋课程————路由交换原理及计算机网络"><meta name="keywords" content="虚拟机,计算机网络,运维"><meta name="author" content="L4bst3r"><meta name="copyright" content="L4bst3r"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/%E5%9B%BE%E6%A0%87.ico"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin><link rel="preconnect" href="//busuanzi.ibruce.info"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="千锋课程————路由交换原理及计算机网络"><meta name="twitter:description" content="千锋课程————路由交换原理及计算机网络"><meta name="twitter:image" content="https://www.obito.pw/img/diary/city10.jpg"><meta property="og:type" content="article"><meta property="og:title" content="千锋课程————路由交换原理及计算机网络"><meta property="og:url" content="https://www.obito.pw/2020/03/31/%E5%8D%83%E9%94%8B%E8%AF%BE%E7%A8%8B%E2%80%94%E2%80%94%E8%B7%AF%E7%94%B1%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86%E5%8F%8A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><meta property="og:site_name" content="Fervidity Sec"><meta property="og:description" content="千锋课程————路由交换原理及计算机网络"><meta property="og:image" content="https://www.obito.pw/img/diary/city10.jpg"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>const autoChangeMode = 'false'
+var t = Cookies.get("theme");
+if (autoChangeMode == '1'){
+const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+const isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+if (t === undefined){
+  if (isLightMode) activateLightMode()
+  else if (isDarkMode) activateDarkMode()
+  else if (isNotSpecified || hasNoSupport){
+    console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+    now = new Date();
+    hour = now.getHours();
+    isNight = hour < 6 || hour >= 18
+    isNight ? activateDarkMode() : activateLightMode()
+}
+} else if (t == 'light') activateLightMode()
+else activateDarkMode()
+
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="https://www.obito.pw/2020/03/31/%E5%8D%83%E9%94%8B%E8%AF%BE%E7%A8%8B%E2%80%94%E2%80%94%E8%B7%AF%E7%94%B1%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86%E5%8F%8A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><link rel="prev" title="MySQL注入基础总结2.0" href="https://www.obito.pw/2020/04/06/MySQL%E6%B3%A8%E5%85%A5%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%932.0/"><link rel="next" title="长度扩展攻击" href="https://www.obito.pw/2020/03/06/%E9%95%BF%E5%BA%A6%E6%89%A9%E5%B1%95%E6%94%BB%E5%87%BB/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://www.obito.pw","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    title: 'Snackbar.bookmark.title',
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  isHome: false,
+  isPost: true
+  
+}</script><meta name="generator" content="Hexo 4.2.0"></head><body><header> <div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">Fervidity Sec</a></span><span class="toggle-menu pull_right close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> List</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> Movie</span></a></li><li><a class="site-page" href="/photo/"><i class="fa-fw fa fa-photo"></i><span> Photo</span></a></li></ul></div></div></span></div></header><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar2.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">13</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">25</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">16</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> List</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> Movie</span></a></li><li><a class="site-page" href="/photo/"><i class="fa-fw fa fa-photo"></i><span> Photo</span></a></li></ul></div></div></div><div id="mobile-sidebar-toc"><div class="toc_mobile_headline">目录</div><div class="sidebar-toc__content"><ol class="toc_mobile_items"><li class="toc_mobile_items-item toc_mobile_items-level-1"><a class="toc_mobile_items-link" href="#千锋课程培训班笔记"><span class="toc_mobile_items-number">1.</span> <span class="toc_mobile_items-text">千锋课程培训班笔记</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#虚拟机"><span class="toc_mobile_items-number">1.1.</span> <span class="toc_mobile_items-text">虚拟机</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#部署windows"><span class="toc_mobile_items-number">1.1.1.</span> <span class="toc_mobile_items-text">部署windows</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#IP-地址知识"><span class="toc_mobile_items-number">1.2.</span> <span class="toc_mobile_items-text">IP 地址知识</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#IP-地址构成"><span class="toc_mobile_items-number">1.2.1.</span> <span class="toc_mobile_items-text">IP 地址构成</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#子网掩码"><span class="toc_mobile_items-number">1.2.2.</span> <span class="toc_mobile_items-text">子网掩码</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#IP-地址类型"><span class="toc_mobile_items-number">1.2.3.</span> <span class="toc_mobile_items-text">IP 地址类型</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#网段与广播"><span class="toc_mobile_items-number">1.2.4.</span> <span class="toc_mobile_items-text">网段与广播</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#交换机-路由器-网关"><span class="toc_mobile_items-number">1.2.5.</span> <span class="toc_mobile_items-text">交换机 路由器 网关</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#计算机连接IP地址的流程"><span class="toc_mobile_items-number">1.2.6.</span> <span class="toc_mobile_items-text">计算机连接IP地址的流程</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#DNS-Domain"><span class="toc_mobile_items-number">1.3.</span> <span class="toc_mobile_items-text">DNS Domain</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#进制转换"><span class="toc_mobile_items-number">1.4.</span> <span class="toc_mobile_items-text">进制转换</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#DOS命令"><span class="toc_mobile_items-number">1.5.</span> <span class="toc_mobile_items-text">DOS命令</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#批处理"><span class="toc_mobile_items-number">1.6.</span> <span class="toc_mobile_items-text">批处理</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#用户与组管理"><span class="toc_mobile_items-number">1.7.</span> <span class="toc_mobile_items-text">用户与组管理</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#用户"><span class="toc_mobile_items-number">1.7.1.</span> <span class="toc_mobile_items-text">用户</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#内置用户"><span class="toc_mobile_items-number">1.7.1.1.</span> <span class="toc_mobile_items-text">内置用户</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#配置文件（家）所在处"><span class="toc_mobile_items-number">1.7.1.2.</span> <span class="toc_mobile_items-text">配置文件（家）所在处</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#一些命令"><span class="toc_mobile_items-number">1.7.1.3.</span> <span class="toc_mobile_items-text">一些命令</span></a></li></ol></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#域-Domain"><span class="toc_mobile_items-number">1.8.</span> <span class="toc_mobile_items-text">域 Domain</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#内网环境"><span class="toc_mobile_items-number">1.8.1.</span> <span class="toc_mobile_items-text">内网环境</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#特点"><span class="toc_mobile_items-number">1.8.2.</span> <span class="toc_mobile_items-text">特点</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#组成"><span class="toc_mobile_items-number">1.8.3.</span> <span class="toc_mobile_items-text">组成</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#原理"><span class="toc_mobile_items-number">1.8.4.</span> <span class="toc_mobile_items-text">原理</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#域的部署"><span class="toc_mobile_items-number">1.8.5.</span> <span class="toc_mobile_items-text">域的部署</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#活动目录"><span class="toc_mobile_items-number">1.8.6.</span> <span class="toc_mobile_items-text">活动目录</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#部署安装活动目录"><span class="toc_mobile_items-number">1.8.7.</span> <span class="toc_mobile_items-text">部署安装活动目录</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#OU：组织单位"><span class="toc_mobile_items-number">1.8.8.</span> <span class="toc_mobile_items-text">OU：组织单位</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#组策略"><span class="toc_mobile_items-number">1.8.9.</span> <span class="toc_mobile_items-text">组策略</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#一些有趣的策略"><span class="toc_mobile_items-number">1.8.9.1.</span> <span class="toc_mobile_items-text">一些有趣的策略</span></a></li></ol></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#PKI-公钥基础设施"><span class="toc_mobile_items-number">1.9.</span> <span class="toc_mobile_items-text">PKI 公钥基础设施</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#PKI概述"><span class="toc_mobile_items-number">1.9.1.</span> <span class="toc_mobile_items-text">PKI概述</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#信息安全三要素"><span class="toc_mobile_items-number">1.9.2.</span> <span class="toc_mobile_items-text">信息安全三要素</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#PKI应用领域"><span class="toc_mobile_items-number">1.9.3.</span> <span class="toc_mobile_items-text">PKI应用领域</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#公钥加密技术"><span class="toc_mobile_items-number">1.9.4.</span> <span class="toc_mobile_items-text">公钥加密技术</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#加密算法"><span class="toc_mobile_items-number">1.9.4.1.</span> <span class="toc_mobile_items-text">加密算法</span></a></li></ol></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#渗透简单流程"><span class="toc_mobile_items-number">1.10.</span> <span class="toc_mobile_items-text">渗透简单流程</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#Nmap"><span class="toc_mobile_items-number">1.11.</span> <span class="toc_mobile_items-text">Nmap</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#一些命令-1"><span class="toc_mobile_items-number">1.11.1.</span> <span class="toc_mobile_items-text">一些命令</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#计算机网络模型"><span class="toc_mobile_items-number">1.12.</span> <span class="toc_mobile_items-text">计算机网络模型</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#分层模型"><span class="toc_mobile_items-number">1.12.1.</span> <span class="toc_mobile_items-text">分层模型</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#分层思想"><span class="toc_mobile_items-number">1.12.1.1.</span> <span class="toc_mobile_items-text">分层思想</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#OSI-七层模型"><span class="toc_mobile_items-number">1.12.1.2.</span> <span class="toc_mobile_items-text">OSI 七层模型</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#TCP-IP-五层协议栈"><span class="toc_mobile_items-number">1.12.1.3.</span> <span class="toc_mobile_items-text">TCP &#x2F; IP 五层协议栈</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#数据传输过程（封装与解封装）"><span class="toc_mobile_items-number">1.12.2.</span> <span class="toc_mobile_items-text">数据传输过程（封装与解封装）</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#传输层"><span class="toc_mobile_items-number">1.12.2.1.</span> <span class="toc_mobile_items-text">传输层</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#网络层"><span class="toc_mobile_items-number">1.12.2.2.</span> <span class="toc_mobile_items-text">网络层</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#数据链路层"><span class="toc_mobile_items-number">1.12.2.3.</span> <span class="toc_mobile_items-text">数据链路层</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#物理层"><span class="toc_mobile_items-number">1.12.2.4.</span> <span class="toc_mobile_items-text">物理层</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#表示层-会话层"><span class="toc_mobile_items-number">1.12.2.5.</span> <span class="toc_mobile_items-text">表示层 &#x2F; 会话层</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#五层协议栈"><span class="toc_mobile_items-number">1.12.3.</span> <span class="toc_mobile_items-text">五层协议栈</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#物理层-physical-layer"><span class="toc_mobile_items-number">1.13.</span> <span class="toc_mobile_items-text">物理层 physical layer</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#数据链路层-Data-Link-Layer"><span class="toc_mobile_items-number">1.14.</span> <span class="toc_mobile_items-text">数据链路层 Data Link Layer</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#结构"><span class="toc_mobile_items-number">1.14.1.</span> <span class="toc_mobile_items-text">结构</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#工作在数据链路层的设备"><span class="toc_mobile_items-number">1.14.2.</span> <span class="toc_mobile_items-text">工作在数据链路层的设备</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#交换机工作原理"><span class="toc_mobile_items-number">1.14.3.</span> <span class="toc_mobile_items-text">交换机工作原理*</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#交换机的接口"><span class="toc_mobile_items-number">1.14.4.</span> <span class="toc_mobile_items-text">交换机的接口</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#交换机基本工作模式、命令及基础知识（路由器配置）"><span class="toc_mobile_items-number">1.14.5.</span> <span class="toc_mobile_items-text">交换机基本工作模式、命令及基础知识（路由器配置）</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#网络层——IP数据包"><span class="toc_mobile_items-number">1.15.</span> <span class="toc_mobile_items-text">网络层——IP数据包</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#结构-1"><span class="toc_mobile_items-number">1.15.1.</span> <span class="toc_mobile_items-text">结构</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#路由"><span class="toc_mobile_items-number">1.15.2.</span> <span class="toc_mobile_items-text">路由</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#VLAN"><span class="toc_mobile_items-number">1.16.</span> <span class="toc_mobile_items-text">VLAN</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#VLAN命令"><span class="toc_mobile_items-number">1.16.1.</span> <span class="toc_mobile_items-text">VLAN命令</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#单臂路由"><span class="toc_mobile_items-number">1.17.</span> <span class="toc_mobile_items-text">单臂路由</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#单臂路由的缺点"><span class="toc_mobile_items-number">1.17.1.</span> <span class="toc_mobile_items-text">单臂路由的缺点</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#三层交换机"><span class="toc_mobile_items-number">1.18.</span> <span class="toc_mobile_items-text">三层交换机</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#小实验"><span class="toc_mobile_items-number">1.18.1.</span> <span class="toc_mobile_items-text">小实验</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#HSRP协议"><span class="toc_mobile_items-number">1.19.</span> <span class="toc_mobile_items-text">HSRP协议</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#小实验-1"><span class="toc_mobile_items-number">1.19.1.</span> <span class="toc_mobile_items-text">小实验</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#ACL"><span class="toc_mobile_items-number">1.20.</span> <span class="toc_mobile_items-text">ACL</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#标准ACL实验"><span class="toc_mobile_items-number">1.20.1.</span> <span class="toc_mobile_items-text">标准ACL实验</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#扩展ACL实验"><span class="toc_mobile_items-number">1.20.2.</span> <span class="toc_mobile_items-text">扩展ACL实验</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#命名ACL"><span class="toc_mobile_items-number">1.20.3.</span> <span class="toc_mobile_items-text">命名ACL</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#NAT"><span class="toc_mobile_items-number">1.21.</span> <span class="toc_mobile_items-text">NAT</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div class="auto_open" id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#千锋课程培训班笔记"><span class="toc-number">1.</span> <span class="toc-text">千锋课程培训班笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟机"><span class="toc-number">1.1.</span> <span class="toc-text">虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#部署windows"><span class="toc-number">1.1.1.</span> <span class="toc-text">部署windows</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP-地址知识"><span class="toc-number">1.2.</span> <span class="toc-text">IP 地址知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IP-地址构成"><span class="toc-number">1.2.1.</span> <span class="toc-text">IP 地址构成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#子网掩码"><span class="toc-number">1.2.2.</span> <span class="toc-text">子网掩码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP-地址类型"><span class="toc-number">1.2.3.</span> <span class="toc-text">IP 地址类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#网段与广播"><span class="toc-number">1.2.4.</span> <span class="toc-text">网段与广播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#交换机-路由器-网关"><span class="toc-number">1.2.5.</span> <span class="toc-text">交换机 路由器 网关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算机连接IP地址的流程"><span class="toc-number">1.2.6.</span> <span class="toc-text">计算机连接IP地址的流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-Domain"><span class="toc-number">1.3.</span> <span class="toc-text">DNS Domain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进制转换"><span class="toc-number">1.4.</span> <span class="toc-text">进制转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DOS命令"><span class="toc-number">1.5.</span> <span class="toc-text">DOS命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#批处理"><span class="toc-number">1.6.</span> <span class="toc-text">批处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户与组管理"><span class="toc-number">1.7.</span> <span class="toc-text">用户与组管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用户"><span class="toc-number">1.7.1.</span> <span class="toc-text">用户</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#内置用户"><span class="toc-number">1.7.1.1.</span> <span class="toc-text">内置用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置文件（家）所在处"><span class="toc-number">1.7.1.2.</span> <span class="toc-text">配置文件（家）所在处</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#一些命令"><span class="toc-number">1.7.1.3.</span> <span class="toc-text">一些命令</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#域-Domain"><span class="toc-number">1.8.</span> <span class="toc-text">域 Domain</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#内网环境"><span class="toc-number">1.8.1.</span> <span class="toc-text">内网环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#特点"><span class="toc-number">1.8.2.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组成"><span class="toc-number">1.8.3.</span> <span class="toc-text">组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-number">1.8.4.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#域的部署"><span class="toc-number">1.8.5.</span> <span class="toc-text">域的部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#活动目录"><span class="toc-number">1.8.6.</span> <span class="toc-text">活动目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部署安装活动目录"><span class="toc-number">1.8.7.</span> <span class="toc-text">部署安装活动目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OU：组织单位"><span class="toc-number">1.8.8.</span> <span class="toc-text">OU：组织单位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组策略"><span class="toc-number">1.8.9.</span> <span class="toc-text">组策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一些有趣的策略"><span class="toc-number">1.8.9.1.</span> <span class="toc-text">一些有趣的策略</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PKI-公钥基础设施"><span class="toc-number">1.9.</span> <span class="toc-text">PKI 公钥基础设施</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PKI概述"><span class="toc-number">1.9.1.</span> <span class="toc-text">PKI概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信息安全三要素"><span class="toc-number">1.9.2.</span> <span class="toc-text">信息安全三要素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PKI应用领域"><span class="toc-number">1.9.3.</span> <span class="toc-text">PKI应用领域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#公钥加密技术"><span class="toc-number">1.9.4.</span> <span class="toc-text">公钥加密技术</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#加密算法"><span class="toc-number">1.9.4.1.</span> <span class="toc-text">加密算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#渗透简单流程"><span class="toc-number">1.10.</span> <span class="toc-text">渗透简单流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.11.</span> <span class="toc-text">Nmap</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一些命令-1"><span class="toc-number">1.11.1.</span> <span class="toc-text">一些命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算机网络模型"><span class="toc-number">1.12.</span> <span class="toc-text">计算机网络模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分层模型"><span class="toc-number">1.12.1.</span> <span class="toc-text">分层模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#分层思想"><span class="toc-number">1.12.1.1.</span> <span class="toc-text">分层思想</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OSI-七层模型"><span class="toc-number">1.12.1.2.</span> <span class="toc-text">OSI 七层模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP-IP-五层协议栈"><span class="toc-number">1.12.1.3.</span> <span class="toc-text">TCP &#x2F; IP 五层协议栈</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据传输过程（封装与解封装）"><span class="toc-number">1.12.2.</span> <span class="toc-text">数据传输过程（封装与解封装）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#传输层"><span class="toc-number">1.12.2.1.</span> <span class="toc-text">传输层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#网络层"><span class="toc-number">1.12.2.2.</span> <span class="toc-text">网络层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据链路层"><span class="toc-number">1.12.2.3.</span> <span class="toc-text">数据链路层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#物理层"><span class="toc-number">1.12.2.4.</span> <span class="toc-text">物理层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#表示层-会话层"><span class="toc-number">1.12.2.5.</span> <span class="toc-text">表示层 &#x2F; 会话层</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五层协议栈"><span class="toc-number">1.12.3.</span> <span class="toc-text">五层协议栈</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#物理层-physical-layer"><span class="toc-number">1.13.</span> <span class="toc-text">物理层 physical layer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据链路层-Data-Link-Layer"><span class="toc-number">1.14.</span> <span class="toc-text">数据链路层 Data Link Layer</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#结构"><span class="toc-number">1.14.1.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工作在数据链路层的设备"><span class="toc-number">1.14.2.</span> <span class="toc-text">工作在数据链路层的设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#交换机工作原理"><span class="toc-number">1.14.3.</span> <span class="toc-text">交换机工作原理*</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#交换机的接口"><span class="toc-number">1.14.4.</span> <span class="toc-text">交换机的接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#交换机基本工作模式、命令及基础知识（路由器配置）"><span class="toc-number">1.14.5.</span> <span class="toc-text">交换机基本工作模式、命令及基础知识（路由器配置）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络层——IP数据包"><span class="toc-number">1.15.</span> <span class="toc-text">网络层——IP数据包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#结构-1"><span class="toc-number">1.15.1.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#路由"><span class="toc-number">1.15.2.</span> <span class="toc-text">路由</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VLAN"><span class="toc-number">1.16.</span> <span class="toc-text">VLAN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN命令"><span class="toc-number">1.16.1.</span> <span class="toc-text">VLAN命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单臂路由"><span class="toc-number">1.17.</span> <span class="toc-text">单臂路由</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#单臂路由的缺点"><span class="toc-number">1.17.1.</span> <span class="toc-text">单臂路由的缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三层交换机"><span class="toc-number">1.18.</span> <span class="toc-text">三层交换机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#小实验"><span class="toc-number">1.18.1.</span> <span class="toc-text">小实验</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HSRP协议"><span class="toc-number">1.19.</span> <span class="toc-text">HSRP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#小实验-1"><span class="toc-number">1.19.1.</span> <span class="toc-text">小实验</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL"><span class="toc-number">1.20.</span> <span class="toc-text">ACL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标准ACL实验"><span class="toc-number">1.20.1.</span> <span class="toc-text">标准ACL实验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#扩展ACL实验"><span class="toc-number">1.20.2.</span> <span class="toc-text">扩展ACL实验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命名ACL"><span class="toc-number">1.20.3.</span> <span class="toc-text">命名ACL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NAT"><span class="toc-number">1.21.</span> <span class="toc-text">NAT</span></a></li></ol></li></ol></div></div></div><main id="content-outer"><div id="top-container" style="background-image: url(/img/diary/city10.jpg)"><div id="post-info"><div id="post-title"><div class="posttitle">千锋课程————路由交换原理及计算机网络</div></div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 发表于 2020-03-31<span class="post-meta__separator">|</span><i class="fa fa-history fa-fw" aria-hidden="true"></i> 更新于 2020-03-31</time><span class="post-meta__separator">|</span><span><i class="fa fa-inbox post-meta__icon fa-fw" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">计算机基础知识</a><i class="fa fa-angle-right fa-fw" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon fa-fw" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span><div class="post-meta-wordcount"><div class="post-meta-pv-cv"><span><i class="fa fa-eye post-meta__icon fa-fw" aria-hidden="true"> </i>阅读量:</span><span id="busuanzi_value_page_pv"></span></div></div></div></div></div><div class="layout layout_post" id="content-inner">   <article id="post"><div class="article-container" id="post-content"><h1 id="千锋课程培训班笔记"><a href="#千锋课程培训班笔记" class="headerlink" title="千锋课程培训班笔记"></a>千锋课程培训班笔记</h1><h2 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h2><p>这部分放在第一部分来讲，必然是有原因的，虚拟机作为一款可以在<strong>真实系统中操作多台虚拟系统</strong>的利器，并且最为独特而有用的<strong>快照功能</strong>使得我们入门网安变得便捷，每次对一台主机进行操作完之后可以进行快照保存或者对于一台新开的主机可以使用快照进行恢复</p>
+<h3 id="部署windows"><a href="#部署windows" class="headerlink" title="部署windows"></a>部署windows</h3><p>本次一共部署了4个系统<code>windows xp</code>、<code>windows server 2003</code>、<code>windows 7</code>、<code>windows server 2008</code> 镜像安装有个推荐的网站 <a href="https://msdn.itellyou.cn/" target="_blank" rel="noopener">itellyou</a> 是一个公益网站，里面下载的镜像全都为纯净版，比在网上搜索干净且快捷</p>
+<p>密钥推荐正版！！！</p>
+<p>（网上可以搜到密钥及密钥工具，嘘~~）</p>
+<h2 id="IP-地址知识"><a href="#IP-地址知识" class="headerlink" title="IP 地址知识"></a>IP 地址知识</h2><p>这部分之前有了解过，所以学起来比较不废劲，理解也比较快</p>
+<h3 id="IP-地址构成"><a href="#IP-地址构成" class="headerlink" title="IP 地址构成"></a>IP 地址构成</h3><p>由<strong>网络位</strong>和<strong>主机位</strong>组成，存在3:1 2:2 1:3 的网络位主机位三种比例</p>
+<h3 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h3><p>子网掩码是用来区分不同网段的，仅由255和0构成，255的部分代表是网络位，0的位置代表的是主机位</p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">IP		   10.0.0.1</span><br><span class="line">子网掩码	255.255.255.0</span><br><span class="line">表示该网络位有三组，主机位只有一组</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="IP-地址类型"><a href="#IP-地址类型" class="headerlink" title="IP 地址类型"></a>IP 地址类型</h3><p>可以通过IP第一组数字判断</p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">A类	1~126</span><br><span class="line">B类	127~191</span><br><span class="line">C类	192~223</span><br><span class="line">D类	224~239	组播地址</span><br><span class="line">E类	240~255 用于科研</span><br><span class="line">127为本地回环地址，表示本地</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="网段与广播"><a href="#网段与广播" class="headerlink" title="网段与广播"></a>网段与广播</h3><p>在一个IP中，主机位全为0的IP地址代表该<strong>网段</strong>，全为255代表该网段的<strong>广播地址</strong></p>
+<h3 id="交换机-路由器-网关"><a href="#交换机-路由器-网关" class="headerlink" title="交换机 路由器 网关"></a>交换机 路由器 网关</h3><p>交换机：组成局域网，不能连接互联网</p>
+<p>路由器：用于连接内网和外网</p>
+<p>网关：指连接局域网和互联网的设备，一般存在于路由器内，其IP地址由局域网给出，一般为可用IP地址的第一个或者最后一个</p>
+<h3 id="计算机连接IP地址的流程"><a href="#计算机连接IP地址的流程" class="headerlink" title="计算机连接IP地址的流程"></a>计算机连接IP地址的流程</h3><ol>
+<li>现在本局域网尝试连接</li>
+<li>非本局域网，通过网关与互联网连接</li>
+</ol>
+<h2 id="DNS-Domain"><a href="#DNS-Domain" class="headerlink" title="DNS Domain"></a>DNS Domain</h2><p>DNS表示域名解析服务器由于解析域名</p>
+<p>域名就是IP地址的可视化形式，与IP地址紧密相关，可以这么理解：</p>
+<p><strong>IP是给机器看的，域名是给人看的</strong></p>
+<p>计算机访问一个域名的流程：</p>
+<ol>
+<li>问自己，有没有DNS缓存</li>
+<li>还是问自己，去Hosts文件类里面找</li>
+<li>找域名服务器DNS，请求解析</li>
+</ol>
+<h2 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h2><p>这一部分比较硬核，我觉得懂得不同进制和基本转换原理就行了</p>
+<h2 id="DOS命令"><a href="#DOS命令" class="headerlink" title="DOS命令"></a>DOS命令</h2><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">dos</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">清屏</span><br><span class="line"><span class="built_in">cls</span></span><br><span class="line"></span><br><span class="line">浏览目录</span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"><span class="built_in">dir</span> /a 显示隐藏文件</span><br><span class="line"></span><br><span class="line">浏览文件内容</span><br><span class="line">typr</span><br><span class="line"><span class="built_in">type</span> <span class="number">1</span>.txt | <span class="built_in">more</span> 以翻页的形式查看</span><br><span class="line"></span><br><span class="line">输出</span><br><span class="line"><span class="built_in">echo</span></span><br><span class="line"></span><br><span class="line">重定向符号</span><br><span class="line">&gt;&gt; 	追加</span><br><span class="line">&gt;	覆盖</span><br><span class="line"></span><br><span class="line">删除目录</span><br><span class="line"><span class="built_in">rd</span></span><br><span class="line"></span><br><span class="line">删除文件</span><br><span class="line"><span class="built_in">del</span></span><br><span class="line"><span class="built_in">del</span> <span class="number">1</span>.txt /s/q s全删 q不要提示</span><br><span class="line"></span><br><span class="line">创建文件夹</span><br><span class="line"><span class="built_in">md</span></span><br><span class="line"></span><br><span class="line">文件属性</span><br><span class="line"><span class="built_in">attrib</span> +h <span class="number">1</span>.txt	隐藏文件</span><br><span class="line"><span class="built_in">attrib</span> -h <span class="number">1</span>.txt	取消隐藏文件</span><br><span class="line"><span class="built_in">attrib</span> +s <span class="number">1</span>.txt	将该文件变为系统级文件</span><br><span class="line"><span class="built_in">attrib</span> +a <span class="number">1</span>.txt	文件权限设为只读</span><br><span class="line"></span><br><span class="line">定时关机</span><br><span class="line">shutdown -s -t <span class="number">100</span>	<span class="number">100</span>秒后自动关机</span><br><span class="line">shutdown -a			取消自动关机</span><br><span class="line">shutdown -r -f		r重启 f强制</span><br><span class="line">shutdown -s -t <span class="number">100</span> -c"xxx"	倒计时处显示消息</span><br><span class="line"></span><br><span class="line">颜色</span><br><span class="line"><span class="built_in">color</span> <span class="number">0</span>a	前一位背景颜色 后一位字体颜色</span><br><span class="line"></span><br><span class="line">注销</span><br><span class="line">logoff</span><br><span class="line"></span><br><span class="line">复制文件</span><br><span class="line"><span class="built_in">copy</span> [路径] <span class="number">1</span>.txt [路径] 新名字</span><br><span class="line"></span><br><span class="line">移动文件</span><br><span class="line"><span class="built_in">move</span> [路径] <span class="number">1</span>.txt [路径] 新名字</span><br><span class="line"></span><br><span class="line">改文件名</span><br><span class="line"><span class="built_in">ren</span> <span class="number">1</span>.txt 新文件名</span><br><span class="line"></span><br><span class="line">* 创建一个大小为<span class="number">4</span>G的空文件，并命名为sys.ini 这里单位为字节 </span><br><span class="line">fsutil file createnew c:\sys.ini <span class="number">4096000000</span></span><br><span class="line"></span><br><span class="line">* 修改关联</span><br><span class="line"><span class="built_in">assoc</span> .txt = exefile</span><br><span class="line"></span><br><span class="line">* 强制杀死指定进程 ==&gt; 导致蓝屏 (winxp win2003)</span><br><span class="line">ntsd -c q -pn winlogin.exe</span><br><span class="line"></span><br><span class="line">* 强制杀死指定进程</span><br><span class="line"><span class="built_in">taskkill</span> /im explorer.exe /f</span><br><span class="line"></span><br><span class="line">打开<span class="built_in">cmd</span></span><br><span class="line"><span class="built_in">start</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">ping</span> 五个包</span><br><span class="line"><span class="built_in">ping</span> -n <span class="number">5</span> <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span></span><br><span class="line"></span><br><span class="line">持续<span class="built_in">ping</span>包</span><br><span class="line"><span class="built_in">ping</span> -t <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span></span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h2><p>批处理就是一次性处理多行<strong><code>DOS命令</code></strong></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">dos</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">输出</span><br><span class="line"><span class="built_in">echo</span></span><br><span class="line"></span><br><span class="line">关闭回显</span><br><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line">停止命令，不关闭命令行</span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">分区与<span class="keyword">goto</span></span><br><span class="line">:name	设置分区，name可以为任何字符串、数字</span><br><span class="line"><span class="keyword">goto</span> name 跳转到name区，执行name区的命令</span><br><span class="line"></span><br><span class="line">不显示命令运行 <span class="number">1</span>&gt;<span class="built_in">nul</span></span><br><span class="line">不显示错误提示 <span class="number">2</span>&gt;<span class="built_in">nul</span></span><br><span class="line">例子：<span class="built_in">ping</span> <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span> <span class="number">1</span>&gt;<span class="built_in">nul</span> <span class="number">2</span>&gt;<span class="built_in">nul</span></span><br><span class="line"></span><br><span class="line">变量部分</span><br><span class="line"><span class="built_in">set</span> a=<span class="number">100</span>		设置变量</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">%a%</span>		输出变量</span><br><span class="line"><span class="built_in">set</span> /p a="请输入"	设置提示让用户输入变量a的值</span><br><span class="line"><span class="variable">%userprofile%</span>	指当前用户的家目录</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>语句</span><br><span class="line"><span class="keyword">if</span> 条件 执行命令	基本格式</span><br><span class="line">例：<span class="keyword">if</span> "<span class="variable">%a%</span>"=<span class="number">1</span> <span class="keyword">goto</span> <span class="number">1</span></span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="用户与组管理"><a href="#用户与组管理" class="headerlink" title="用户与组管理"></a>用户与组管理</h2><h3 id="用户"><a href="#用户" class="headerlink" title="用户"></a>用户</h3><p>不同用户所对应的权限的也就不同</p>
+<p>每个账号拥有<strong>唯一</strong>的<code>SID</code> (安全标识符)</p>
+<p><code>admin用户</code> 末尾以<code>-500</code> 结束</p>
+<p><code>user用户</code> 以 <code>-1000+</code> 结束</p>
+<p>账号密码的存储位置：<strong><code>c:\windows\system32\config\SAM</code></strong></p>
+<h4 id="内置用户"><a href="#内置用户" class="headerlink" title="内置用户"></a>内置用户</h4><p>给人使用：administrator、guest</p>
+<p>给机器使用：system、local services、network services</p>
+<h4 id="配置文件（家）所在处"><a href="#配置文件（家）所在处" class="headerlink" title="配置文件（家）所在处"></a>配置文件（家）所在处</h4><p><code>xp/2003</code>：c:\Document and Setting\</p>
+<p><code>7/2008</code>：c:\User\</p>
+<h4 id="一些命令"><a href="#一些命令" class="headerlink" title="一些命令"></a>一些命令</h4><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">dos</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">net</span> user	列出</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+
+
+
+
+<h2 id="域-Domain"><a href="#域-Domain" class="headerlink" title="域 Domain"></a>域 Domain</h2><h3 id="内网环境"><a href="#内网环境" class="headerlink" title="内网环境"></a>内网环境</h3><ul>
+<li>工作组：默认模式，人人平等，不方便管理</li>
+<li>域：人人不平等，集中管理，统一管理</li>
+</ul>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>统一 / 集中管理</li>
+</ul>
+<h3 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h3><ol>
+<li>域控制器（老大）：<strong>DC（Domain Controller）</strong></li>
+<li>成员机</li>
+</ol>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>域命名：与域名一样也是用<code>xxx.com</code></p>
+<p>每个主机的域名就为<code>主机名 + xxx.com</code></p>
+<p>解析：DNS服务器（一般就是域控制器内置），会自动创建区域和第一个主机</p>
+<p><strong>DC</strong>上安装了一张表（<strong>活动目录AD</strong>，放着所有的公共资源，可以建立域账号）在一台成员机上用该账号进行登陆，成员机本地并没有该账号的记录，就会向DC询问，DC查询AD内发现有这个账号，允许登陆该成员机。</p>
+<p><strong>AD</strong>可以定义一个<strong>GPO</strong>（<strong><a href="https://zhidao.baidu.com/question/574458242.html" target="_blank" rel="noopener">组策略对象</a></strong>，为特定的用户和计算机组创建特定的桌面配置）</p>
+<h3 id="域的部署"><a href="#域的部署" class="headerlink" title="域的部署"></a>域的部署</h3><ol>
+<li>安装域控制器——生成域环境</li>
+<li>安装活动目录——生成域控制器</li>
+</ol>
+<h3 id="活动目录"><a href="#活动目录" class="headerlink" title="活动目录"></a>活动目录</h3><ul>
+<li>统一 / 集中管理</li>
+</ul>
+<h3 id="部署安装活动目录"><a href="#部署安装活动目录" class="headerlink" title="部署安装活动目录"></a>部署安装活动目录</h3><ol>
+<li>配置IP地址，桥街到VMware2</li>
+<li>开始运行——输入<code>dcpromo</code> ，安装活动目录<ul>
+<li>勾选DNS</li>
+<li>域的FQDN</li>
+<li>域树：主公司的域和分公司的域为父子关系构成的一个总体</li>
+<li>现有林：多个域树构成的总体</li>
+<li>林功能级别：设置林的最低服务器版本2003</li>
+<li>域功能级别：设置域的最低服务器版本2003</li>
+<li>SYSVOL：组策略存放处</li>
+<li>NTDS：目录服务</li>
+<li>目录服务的管理员密码：活动目录AD的密码</li>
+</ul>
+</li>
+<li>验证域：<ul>
+<li>登陆域，计算机右键—所属域、计算机名</li>
+<li>DC的本地管理员升级为域管理员</li>
+<li>DNS处自动创建区域文件、自动注册DC的域名解析</li>
+<li>AD用户和计算机</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>打开AD用户和计算机：</p>
+<p>computer：普通域成员机列表</p>
+<p>Domain Controllers：域控制器（DC）</p>
+<p>User：域账号，位于AD活动目录里面</p>
+</blockquote>
+<ol start="4">
+<li>加入域（winxp）</li>
+</ol>
+<p>配好IP地址、DNS—右键我的电脑属性—计算机名—计算机名称更改—填入要加入的域（xxx.com）—输入密码（输入的是之前存在于该域的用户xxx.com\adminstrator，密码123.com）</p>
+<ol start="5">
+<li>DC新建域用户</li>
+</ol>
+<p>在Users处右键—输入姓名（中文）——用户登陆名（英文）——设置密码</p>
+<ol start="6">
+<li>问题解决思路</li>
+</ol>
+<ul>
+<li><p>加入域不成功：</p>
+<ul>
+<li>客户机的DNS是否设置正确</li>
+<li>域DNS能否解析该域名</li>
+<li>客户机本地DNS缓存</li>
+</ul>
+</li>
+<li><p>登入域不成功：</p>
+<ul>
+<li>登陆时要选择本机登陆还是域登陆</li>
+</ul>
+</li>
+<li><p>域用户的权限：</p>
+<ul>
+<li>不能加入域管理员组就加入本地管理员组</li>
+<li>登陆域管理员后添加该域成员至本地管理员组</li>
+</ul>
+<blockquote>
+<p>本地管理员组：administrators</p>
+<p>域管理员组：Domain admins</p>
+</blockquote>
+<p>在域内新建的用户都是普通用户，只有在Domain admins内添加才为域管理员</p>
+</li>
+</ul>
+<h3 id="OU：组织单位"><a href="#OU：组织单位" class="headerlink" title="OU：组织单位"></a>OU：组织单位</h3><p>用于归类域资源（域用户、域计算机、域组）</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OU 组织单位</td>
+<td>下发组策略GPO（对员工的强制限制）</td>
+</tr>
+<tr>
+<td>组</td>
+<td>赋予权限</td>
+</tr>
+</tbody></table>
+<p>创建OU：</p>
+<ul>
+<li>右键—新建组织单位</li>
+</ul>
+<p>对计算机和对用户的限制不一样</p>
+<ul>
+<li>对用户限制：在不同电脑上登陆该用户都会受限</li>
+<li>对计算机限制：不同用户在该电脑上登陆限制都是一样的</li>
+</ul>
+<h3 id="组策略"><a href="#组策略" class="headerlink" title="组策略"></a>组策略</h3><p><strong>作用：</strong>可以修改计算机的各种属性（桌面背景、网络参数等）</p>
+<p>整个域是一个OU，DC也是一个OU。组策略在域中，是基于OU下发的</p>
+<p><strong>打开：</strong>在开始-管理工具-组策略管理</p>
+<p><strong>组策略应用顺序：</strong><code>LSDOU顺序</code> Local S站点 Domain OU表示所有OU 当出现了冲突，后应用的OU生效。若同时有多个策略叠加，已开启和已禁用 &gt; 未配置</p>
+<table>
+<thead>
+<tr>
+<th align="center">LSDOU顺序</th>
+<th align="center"></th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">上级OU</td>
+<td align="center">桌面：a.jpg</td>
+<td align="center">运行：删除（已启用）</td>
+</tr>
+<tr>
+<td align="center">下级OU</td>
+<td align="center">桌面：未配置</td>
+<td align="center">运行：不删除（未配置）</td>
+</tr>
+<tr>
+<td align="center">下级OU用户结果</td>
+<td align="center">桌面：a.jpg</td>
+<td align="center">运行：删除（已启用）</td>
+</tr>
+</tbody></table>
+<p><strong>查看设置的组策略：</strong> 在组策略管理点击一个OU，在右边点击设置，之后可以查看到当前OU的所有设置的组策略</p>
+<p><strong>强制组策略：</strong> 右键选择强制即可</p>
+<p><strong>阻止继承：</strong> 不考虑上级OU，只考虑本级的OU，强制 &gt; 组织继承</p>
+<h4 id="一些有趣的策略"><a href="#一些有趣的策略" class="headerlink" title="一些有趣的策略"></a>一些有趣的策略</h4><p><strong>用户注销时自动清除某文件夹：</strong></p>
+<ol>
+<li>组策略管理编辑器—用户配置—Windows 设置—注销属性</li>
+<li>添加clear.bat脚本</li>
+<li>在客户机上验证</li>
+</ol>
+<h2 id="PKI-公钥基础设施"><a href="#PKI-公钥基础设施" class="headerlink" title="PKI 公钥基础设施"></a>PKI 公钥基础设施</h2><h3 id="PKI概述"><a href="#PKI概述" class="headerlink" title="PKI概述"></a>PKI概述</h3><p>Public Key Infrastructure</p>
+<p>作用：通过加密技术和数字签名保证信息的安全</p>
+<p>组成：公钥机密技术、数字证书、CA、RA</p>
+<h3 id="信息安全三要素"><a href="#信息安全三要素" class="headerlink" title="信息安全三要素"></a>信息安全三要素</h3><ol>
+<li><p><strong>机密性</strong></p>
+<p>别人解密不了</p>
+</li>
+<li><p><strong>完整性</strong></p>
+<p>数据不被破坏</p>
+</li>
+<li><p><strong>身份验证 / 操作的不可否认性</strong></p>
+</li>
+</ol>
+<h3 id="PKI应用领域"><a href="#PKI应用领域" class="headerlink" title="PKI应用领域"></a>PKI应用领域</h3><ul>
+<li>SSL / HTTPS</li>
+<li>IPsecVPN</li>
+<li>部分远程访问VPN</li>
+</ul>
+<h3 id="公钥加密技术"><a href="#公钥加密技术" class="headerlink" title="公钥加密技术"></a>公钥加密技术</h3><p><strong>作用：</strong>实现对信息加密、数字签名的安全等保障</p>
+<h4 id="加密算法"><a href="#加密算法" class="headerlink" title="加密算法"></a>加密算法</h4><p><strong>对称算法：</strong> 加解密的密钥一致</p>
+<blockquote>
+<p>x+5=y</p>
+<p>x是原数据 / 原文</p>
+<p>y是密文</p>
+<p>5是key</p>
+</blockquote>
+<p><strong>非对称加密算法：</strong> 通信双方各自产生一对公私钥</p>
+<blockquote>
+<p>双方各自交换公钥</p>
+<p>公钥和私钥为互相加解密的关系</p>
+<p>公私钥不可互相逆推</p>
+</blockquote>
+<p><strong>数字签名</strong></p>
+<p>用自己的私钥对摘要进行加密后称为<strong>数字签名</strong></p>
+<p>用于证明发送方的身份（自证）</p>
+<p><strong>摘要</strong></p>
+<p>通过hash算法（摘要算法）加密得出的密文称为<strong>摘要</strong></p>
+<ul>
+<li>双方互换公钥，甲的明文通过你的公钥进行加密，唯一能解密的只有乙，这一步保证了<strong>机密性</strong></li>
+<li>甲再对密文进行hash加密形成<strong>摘要</strong>后，再通过甲的私钥进行加密形成<strong>数字签名</strong>，这一步可以保证完整性（可以验证两部分密文+数字签名是否一致）</li>
+<li>通过CA颁发的证书用于<strong>证明真实身份</strong></li>
+</ul>
+<p><strong>CA</strong></p>
+<p>CA是权威证书颁发机构，用于公正“公钥”的合法性，<strong>证明证书主体与证书中所包含的公钥的惟一对应关系</strong>（“证书申请者”被发放证书后即成为“证书主体”）</p>
+<h2 id="渗透简单流程"><a href="#渗透简单流程" class="headerlink" title="渗透简单流程"></a>渗透简单流程</h2><ol start="0">
+<li><p><strong>授权</strong></p>
+</li>
+<li><p><strong>信息收集</strong></p>
+<ul>
+<li><code>nslookup</code> </li>
+<li><code>whios</code></li>
+</ul>
+</li>
+<li><p><strong>扫描漏洞</strong></p>
+<p>nmap = &gt; ip范围 端口 （IIS，apache，网站）</p>
+<p>手工测试：telnet 10.1.1.2 445 </p>
+<p><strong>高级扫描：</strong></p>
+<p>比如IIS漏洞2003-IIS6.0 2008IIS7.0</p>
+<p>扫描网站漏洞</p>
+</li>
+<li><p><strong>漏洞利用</strong></p>
+</li>
+<li><p><strong>提权（shell环境、桌面环境、最高权限）</strong></p>
+</li>
+<li><p><strong>清除日志</strong></p>
+</li>
+<li><p><strong>留后门</strong></p>
+</li>
+<li><p><strong>渗透测试报告</strong></p>
+</li>
+</ol>
+<h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><h3 id="一些命令-1"><a href="#一些命令-1" class="headerlink" title="一些命令"></a>一些命令</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">dos</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">查看主机在线</span><br><span class="line">namp -sP www.baidu.com</span><br><span class="line"></span><br><span class="line">查看操作系统</span><br><span class="line">namp -O <span class="number">10</span>.<span class="number">1</span>.<span class="number">1</span>.<span class="number">1</span>/<span class="number">24</span></span><br><span class="line"></span><br><span class="line">查看指定端口开放</span><br><span class="line">nmap -p <span class="number">21</span>,<span class="number">23</span>,<span class="number">443</span> <span class="number">10</span>.<span class="number">1</span>.<span class="number">1</span>.<span class="number">1</span></span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="计算机网络模型"><a href="#计算机网络模型" class="headerlink" title="计算机网络模型"></a>计算机网络模型</h2><h3 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h3><h4 id="分层思想"><a href="#分层思想" class="headerlink" title="分层思想"></a>分层思想</h4><p>通信需求进而<strong>定义协议标准</strong></p>
+<p>将复杂的流程分解为几个功能相对单一的子过程</p>
+<h4 id="OSI-七层模型"><a href="#OSI-七层模型" class="headerlink" title="OSI 七层模型"></a>OSI 七层模型</h4><blockquote>
+<p>1974年，ISO组织发布了OSI参考模型</p>
+<p>Open System Interconnection 开放的通信系统互联参考模型</p>
+</blockquote>
+<p><a href="https://i.loli.net/2020/03/14/FK2CV6R5Drw8GUQ.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="OSI七层模型.png" class="fancybox"><img alt="OSI七层模型.png" data-src="https://i.loli.net/2020/03/14/FK2CV6R5Drw8GUQ.png" class="lazyload" title="OSI七层模型.png"></a></p>
+<h4 id="TCP-IP-五层协议栈"><a href="#TCP-IP-五层协议栈" class="headerlink" title="TCP / IP 五层协议栈"></a>TCP / IP 五层协议栈</h4><p>基本同时诞生，OSI先有模型，TCP / IP 先有协议</p>
+<h3 id="数据传输过程（封装与解封装）"><a href="#数据传输过程（封装与解封装）" class="headerlink" title="数据传输过程（封装与解封装）"></a>数据传输过程（封装与解封装）</h3><h4 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h4><blockquote>
+<p>TCP / UDP + 数据 = <strong>数据段 Fragment</strong></p>
+</blockquote>
+<p><strong><code>TCP/UDP 头</code></strong>  <strong>端口号</strong></p>
+<ul>
+<li>标记<strong>源端口号</strong>（客户端）和<strong>末端口号</strong>（服务器）</li>
+<li>完成<strong>进程到从进程的通信</strong>（通过<strong>应用层的端口号</strong>来控制）</li>
+<li>标记是<strong>从哪个应用传的</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">头部</th>
+<th align="center">作用 / 区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">TCP</td>
+<td align="center">可靠安全，字节多</td>
+</tr>
+<tr>
+<td align="center">UDP</td>
+<td align="center">快，字节少</td>
+</tr>
+</tbody></table>
+<p><strong>TCP</strong></p>
+<ul>
+<li>提供可靠安全的传输，需要和对方建立连接，有数据重传机制</li>
+<li>面向连接服务</li>
+</ul>
+<p><strong>UDP</strong></p>
+<ul>
+<li>快捷的传输，无重传机制</li>
+<li>无连接服务</li>
+</ul>
+<p>加密只是对内容进行传输，与传输过程的安全性是两回事</p>
+<h4 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h4><blockquote>
+<p>IP包头 + TCP / UDP + 数据 = <strong>IP包 / 报文 Packet</strong></p>
+</blockquote>
+<p><strong><code>IP包头</code></strong> <strong>IP地址</strong></p>
+<ul>
+<li>完成<strong>点到点</strong>的通信</li>
+</ul>
+<h4 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h4><blockquote>
+<p>MAC子层 + IP包头 + TCP / UDP + 数据 +FCS = <strong>帧 Frame</strong></p>
+</blockquote>
+<p>交换机不认识<code>IP</code>地址，只认识<code>MAC</code>地址</p>
+<p><strong><code>MAC子层</code></strong> <strong>MAC地址</strong></p>
+<ul>
+<li><strong>源MAC地址</strong>和<strong>目标MAC地址</strong>（给交换机看）</li>
+<li>交换机根据MAC地址转发数据</li>
+</ul>
+<p><strong><code>FCS</code></strong> </p>
+<ul>
+<li>Frame Check Sequence帧校验序列，帧尾，占4个字节</li>
+<li>表示前边的数据放在循环算法里得出来的值，用来验证完整性的</li>
+</ul>
+<h4 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h4><blockquote>
+<p><strong>比特 bit</strong></p>
+</blockquote>
+<ul>
+<li>传输数字 / 模拟信号</li>
+</ul>
+<p><a href="https://i.loli.net/2020/03/14/avTQMpHG6S5OFtl.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="数据的封装与解封装过程.jpg" class="fancybox"><img alt="数据的封装与解封装过程.jpg" data-src="https://i.loli.net/2020/03/14/avTQMpHG6S5OFtl.png" class="lazyload" title="数据的封装与解封装过程.jpg"></a></p>
+<h4 id="表示层-会话层"><a href="#表示层-会话层" class="headerlink" title="表示层 / 会话层"></a>表示层 / 会话层</h4><p>表示层：将数据编码为二进制（ASCII）</p>
+<p>会话层：维持会话秩序，避免数据堵塞</p>
+<h3 id="五层协议栈"><a href="#五层协议栈" class="headerlink" title="五层协议栈"></a>五层协议栈</h3><table>
+<thead>
+<tr>
+<th>层</th>
+<th>单元</th>
+<th>应用</th>
+<th>协议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>应用层</td>
+<td>数据PDU</td>
+<td>PC/防火墙</td>
+<td>HTTP<strong>80</strong> HTTPS<strong>443</strong> SSH<strong>22</strong> DNS<strong>53</strong> Telnet<strong>23</strong> FTP<strong>20/21</strong> DHCP<strong>67/68 **SMPT</strong>25** POP3<strong>110</strong> RDP<strong>3389</strong> SMB<strong>445</strong> MySQL<strong>3306</strong></td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>数据段Fragment</td>
+<td>防火墙</td>
+<td>TCP UDP</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>包/报文Packet</td>
+<td>路由器</td>
+<td>ICMP IP ARP</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td>帧Frame</td>
+<td>交换机/网卡</td>
+<td>MAC子层协议</td>
+</tr>
+<tr>
+<td>物理层</td>
+<td>比特bit</td>
+<td>网线/网卡</td>
+<td>数字/模拟信号</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>ping</code>命令使用络层的<code>ICMP</code>协议，不会用到上面两层</li>
+</ul>
+<p><strong>五层协议栈</strong></p>
+<p><a href="https://i.loli.net/2020/03/14/SiDuedtgIYRA9bF.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="五层协议栈.png" class="fancybox"><img alt="五层协议栈.png" data-src="https://i.loli.net/2020/03/14/SiDuedtgIYRA9bF.png" class="lazyload" title="五层协议栈.png"></a></p>
+<p><strong>各层通信</strong></p>
+<p><a href="https://i.loli.net/2020/03/14/e3YPZbFw4dk86a5.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="各层通信.png" class="fancybox"><img alt="各层通信.png" data-src="https://i.loli.net/2020/03/14/e3YPZbFw4dk86a5.png" class="lazyload" title="各层通信.png"></a></p>
+<h2 id="物理层-physical-layer"><a href="#物理层-physical-layer" class="headerlink" title="物理层 physical layer"></a>物理层 physical layer</h2><p>载体：网线 / 光纤 / 空气</p>
+<p>信号：</p>
+<ul>
+<li>电信号：模拟信号 / 数字信号（中继器，抗干扰能力强）</li>
+<li>光信号：光纤类型<ul>
+<li>单模光纤 只传输一种光</li>
+<li>多模光纤 传输多种光</li>
+</ul>
+</li>
+</ul>
+<p>网线/双绞线</p>
+<ul>
+<li>五类 超五类 六类</li>
+<li>排线序：<ul>
+<li>T568A标准：白绿 绿 白橙 蓝 白蓝 橙 白棕 棕</li>
+<li>T568B标准：白橙 橙 白绿 蓝 白蓝 绿 白棕 棕</li>
+<li>1 2 发送 3 6接收</li>
+</ul>
+</li>
+<li>交叉线：<ul>
+<li>两边的线序不一样，</li>
+<li>同种设备之间（三层以上都算，路由器，服务器，电脑）</li>
+</ul>
+</li>
+<li>直通线：<ul>
+<li>两端线序相同</li>
+<li>异种设备间之间</li>
+</ul>
+</li>
+<li>全反线console线</li>
+</ul>
+<h2 id="数据链路层-Data-Link-Layer"><a href="#数据链路层-Data-Link-Layer" class="headerlink" title="数据链路层 Data Link Layer"></a>数据链路层 Data Link Layer</h2><h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>格式：</p>
+<ul>
+<li>802.11帧格式：无线</li>
+<li>802.3帧格式：有线</li>
+</ul>
+<p><strong>帧头：</strong></p>
+<ul>
+<li>网卡封装帧头</li>
+<li>帧头由<strong>目标MAC、源MAC、类型</strong>组成</li>
+<li>类型字段：<ul>
+<li>往上发数据时需要选择发送给哪一个协议</li>
+<li>作用：识别上层协议，为上层提供服务</li>
+<li>0x0800 上层是IP协议</li>
+<li>0x0806 上层是ARP协议</li>
+</ul>
+</li>
+<li>帧头大小：6+6+2=14字节</li>
+</ul>
+<p><strong>上三层数据：</strong></p>
+<ul>
+<li>大小：<ul>
+<li>MTU值（最大传输单元）：1500字节</li>
+</ul>
+</li>
+</ul>
+<p><strong>帧尾：</strong></p>
+<ul>
+<li>帧尾大小：4字节</li>
+</ul>
+<h3 id="工作在数据链路层的设备"><a href="#工作在数据链路层的设备" class="headerlink" title="工作在数据链路层的设备"></a>工作在数据链路层的设备</h3><ul>
+<li>交换机/网卡</li>
+</ul>
+<h3 id="交换机工作原理"><a href="#交换机工作原理" class="headerlink" title="交换机工作原理*"></a>交换机工作原理*</h3><p>Switch视角</p>
+<ol>
+<li>接收到帧，检查MAC地址表<ul>
+<li>若无匹配项，<strong>记录</strong>源MAC和接口至<strong>MAC地址表</strong>，<strong>广播转发</strong></li>
+<li>若有匹配项，<strong>单播转发</strong></li>
+</ul>
+</li>
+<li>交换机2接收到该帧，<strong>检查</strong>MAC地址表，也<strong>记录</strong>源MAC，<strong>广播/单播</strong>给其他端口</li>
+</ol>
+<p>交换机<strong>永远不会记录目标MAC地址</strong></p>
+<p>交换机MAC地址表更新：</p>
+<ul>
+<li>立即更新：计算机换接口</li>
+<li>等待老化时间：计算机拔出接口，未发送帧</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ul>
+<li>计算机换接口时，有其他数据发到新接口上，计算机会丢弃该帧</li>
+<li>MAC地址表的老化时间默认是300秒</li>
+</ul>
+<h3 id="交换机的接口"><a href="#交换机的接口" class="headerlink" title="交换机的接口"></a>交换机的接口</h3><table>
+<thead>
+<tr>
+<th>接口类型</th>
+<th>速率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>E Ethernet</td>
+<td>10Mb</td>
+</tr>
+<tr>
+<td>F FastEthernet</td>
+<td>100Mb</td>
+</tr>
+<tr>
+<td>G GigabitEthernet</td>
+<td>1000Mb</td>
+</tr>
+<tr>
+<td>Te TenGigabitEthernet</td>
+<td>10000Mb</td>
+</tr>
+</tbody></table>
+<p><code>F0/1</code> 0表示模块号，1表示接口号</p>
+<p><strong>接口速率自适应：</strong> 1000/100/10M自适应，</p>
+<p><strong>接口状态：</strong>up / down</p>
+<blockquote>
+<p>down的三种类型：</p>
+<ol>
+<li>人工down</li>
+<li>速率不匹配</li>
+<li>双工模式不匹配（双工duplex）</li>
+</ol>
+</blockquote>
+<h3 id="交换机基本工作模式、命令及基础知识（路由器配置）"><a href="#交换机基本工作模式、命令及基础知识（路由器配置）" class="headerlink" title="交换机基本工作模式、命令及基础知识（路由器配置）"></a>交换机基本工作模式、命令及基础知识（路由器配置）</h3><blockquote>
+<p>第一次配置网络设备，需要使用console线，在PC需要使用“超级终端”或其它软件</p>
+</blockquote>
+<ol>
+<li><strong>用户模式：</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">switch&gt;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>可以查看交换机的基本简单信息</li>
+<li>但不能做任何修改配置</li>
+</ul>
+<ol start="2">
+<li><strong>特权模式</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入enable</span><br><span class="line">switch&gt; enable</span><br><span class="line">switch&gt; en		&#x2F;&#x2F; 缩写</span><br><span class="line">switch#</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>可以查看所有配置，可以做测试、保存、初始化，</li>
+<li>但不能修改配置</li>
+</ul>
+<ol start="3">
+<li><strong>配置终端模式</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">在特权模式下输入configure</span><br><span class="line">switch# configure terminal</span><br><span class="line">switch# conf t		&#x2F;&#x2F;缩写</span><br><span class="line">switch(config)#</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>默认不能查看配置！</li>
+<li>可以修改配置，且全局生效！</li>
+</ul>
+<ol start="4">
+<li><strong>接口配置模式</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">在配置终端模式下输入interface f0&#x2F;2等接口</span><br><span class="line">switch(config)# interface f0&#x2F;2</span><br><span class="line">switch(config)# int f0&#x2F;2		&#x2F;&#x2F; 缩写</span><br><span class="line">switch(config-if)#</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>默认不能查看配置！</li>
+<li>可以修改配置，且对该端口生效！</li>
+</ul>
+<ol start="5">
+<li><strong>console口/线/控制台模式</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">在配置终端模式下输入line </span><br><span class="line">Switch(config)#line console 0</span><br><span class="line">Switch(config)#line co 0		&#x2F;&#x2F; 缩写</span><br><span class="line">Switch(config-line)#</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>默认不能查看配置！</li>
+<li>可以修改配置，且对console生效！</li>
+</ul>
+<ol start="6">
+<li><strong>一些简单命令</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">退出一级</span><br><span class="line">&gt;exit</span><br><span class="line">直接退到特权模式</span><br><span class="line">&gt;end</span><br><span class="line">查看简写,可以查看该模式下的以e开头的命令</span><br><span class="line">&gt;e？</span><br><span class="line">tab可以补全</span><br><span class="line"></span><br><span class="line">修改交换机名称</span><br><span class="line">conf t</span><br><span class="line">&gt;hostname xxx</span><br><span class="line"></span><br><span class="line">改密码</span><br><span class="line">用户密码：</span><br><span class="line">line co 0</span><br><span class="line">&gt;password 123.com</span><br><span class="line">&gt;login		&#x2F;&#x2F; 开启验证</span><br><span class="line"></span><br><span class="line">特权密码</span><br><span class="line">conf t</span><br><span class="line">enable password 123 </span><br><span class="line">enable secret 1234	&#x2F;&#x2F; 保存时以密文形式</span><br><span class="line"></span><br><span class="line">重启</span><br><span class="line">en</span><br><span class="line">reload</span><br></pre></td></tr></table></figure></div>
+
+<ol start="7">
+<li><strong>快捷键</strong></li>
+</ol>
+<ul>
+<li><code>ctrl+u</code> 清除光标前的所有命令</li>
+<li><code>ctrl+a</code> 快速定位到行首</li>
+<li><code>ctrl+e</code> 快速定位到行尾</li>
+</ul>
+<ol start="8">
+<li><strong>配置文件</strong></li>
+</ol>
+<p><code>running-config</code> 配置文件，保存配置</p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">en</span><br><span class="line">copy running-config startup-config</span><br><span class="line"></span><br><span class="line">en</span><br><span class="line">show running-config 	&#x2F;&#x2F; 浏览配置文件</span><br></pre></td></tr></table></figure></div>
+
+<p>交换机开机后查找<code>startup-config</code>，写入<code>running-config</code> 内，若无，则创建<code>running-config</code></p>
+<blockquote>
+<p>在PT 7.2以上的版本退出时会提示是否要save</p>
+</blockquote>
+<ol start="9">
+<li><strong>查看MAC地址表和接口状态列表</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">en</span><br><span class="line">show mac-address-table</span><br><span class="line"></span><br><span class="line">接口状态列表</span><br><span class="line">Interface              IP-Address      OK? Method Status                Protocol </span><br><span class="line">FastEthernet0&#x2F;1        unassigned      YES manual up                    up </span><br><span class="line">FastEthernet0&#x2F;2        unassigned      YES manual down                  down </span><br><span class="line"></span><br><span class="line">int f0&#x2F;1</span><br><span class="line">shutdown	 	&#x2F;&#x2F; 手工关闭</span><br><span class="line">no shutdown		&#x2F;&#x2F; 手工打开</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>第一个down：开启但未连线</li>
+<li>第一个up：开启且接上线</li>
+<li>第一个administratively down：手工关闭掉</li>
+<li>第二个down：未协商成功（双工模式、速率之类的）</li>
+<li>第二个up：协商成功</li>
+</ul>
+<ol start="10">
+<li><strong>配置模式下使用特权模式的命令</strong></li>
+</ol>
+<p>在每条命令前加上<code>do</code></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">do show mac-address-table</span><br></pre></td></tr></table></figure></div>
+
+<ol start="11">
+<li><strong>修改配置</strong></li>
+</ol>
+<p>在配置命令前加上<code>no</code></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">line co 0 </span><br><span class="line">&#x2F;&#x2F; 在哪配置的就在哪里删除</span><br><span class="line">&#x2F;&#x2F; 删除密码时可以不要加密码（具有唯一性）</span><br><span class="line">no password 123.com</span><br><span class="line">no login</span><br></pre></td></tr></table></figure></div>
+
+<ol start="12">
+<li><strong>路由器配置</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int f0&#x2F;0</span><br><span class="line">ip add 10.1.1.254 255.255.255.0</span><br><span class="line">no shutdown</span><br><span class="line">&#x2F;&#x2F; 查看接口状态！</span><br><span class="line">do sh ip int b</span><br><span class="line">Interface              IP-Address      OK? Method Status                Protocol </span><br><span class="line">FastEthernet0&#x2F;0        10.1.1.254      YES manual up                    up </span><br><span class="line">FastEthernet0&#x2F;1        unassigned      YES unset  administratively down down </span><br><span class="line">Vlan1                  unassigned      YES unset  administratively down down</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>第一个up：人工开启路由器</li>
+<li>第一个administratively down：人工关闭</li>
+<li>第二个up：检测到连接了交换机</li>
+<li>第二个down：检测到连接了交换机</li>
+</ul>
+<ol start="13">
+<li><strong>清空 / 擦除</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">en</span><br><span class="line">erase startup-config</span><br></pre></td></tr></table></figure></div>
+
+<ol start="14">
+<li><strong>设置虚拟端口远程连接</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conf t</span><br><span class="line">line vty 0 3	&#x2F;&#x2F; 开启四个虚拟端口</span><br><span class="line">修改&#x2F;添加密码（特权模式加密码才可以远程连接）</span><br><span class="line">在PC上</span><br><span class="line">telnet 10.1.1.254</span><br></pre></td></tr></table></figure></div>
+
+<ol start="15">
+<li><strong>PC连接路由器（ssh/telnet）</strong><ol>
+<li>路由器配置虚拟端口</li>
+</ol>
+</li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">普通用户模式：</span><br><span class="line">开启远程服务</span><br><span class="line">conf t</span><br><span class="line">&#x2F;&#x2F; 配合ssh服务</span><br><span class="line">hostname r1</span><br><span class="line">ip domain-name r1.qf.com</span><br><span class="line">crypto key generate rsa		&#x2F;&#x2F;生成密钥对</span><br><span class="line"></span><br><span class="line">line vty 0 4			&#x2F;&#x2F; 进入虚拟终端口配置</span><br><span class="line">	transport input all&#x2F;none&#x2F;ssh&#x2F;telnet	</span><br><span class="line">	password 密码</span><br><span class="line">	login</span><br><span class="line">	</span><br><span class="line">远程：</span><br><span class="line">telnet 10.1.1.254</span><br><span class="line">ssh -l r1 10.1.1.254 	&#x2F;&#x2F; -l 后面用户名</span><br><span class="line"></span><br><span class="line">本地用户模式</span><br><span class="line">conf t</span><br><span class="line">&#x2F;&#x2F; 配合ssh服务</span><br><span class="line">hostname r1</span><br><span class="line">ip domain-name r1.qf.com</span><br><span class="line">crypto key generate rsa		&#x2F;&#x2F;生成密钥对</span><br><span class="line"></span><br><span class="line">username xx password 123.com	&#x2F;&#x2F;配置本地用户</span><br><span class="line">line vty 0 4</span><br><span class="line">	transport input all&#x2F;none&#x2F;ssh&#x2F;telnet	</span><br><span class="line">	password 密码</span><br><span class="line">	login local</span><br><span class="line"></span><br><span class="line">远程：</span><br><span class="line">telnet 10.1.1.254</span><br><span class="line">ssh -l xx 10.1.1.254</span><br></pre></td></tr></table></figure></div>
+
+<ol start="16">
+<li><strong>交换机虚拟接口配置ip</strong></li>
+</ol>
+<p>交换机内部有虚拟PC，虚拟接口用来配置<strong>管理ip地址</strong></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conf t</span><br><span class="line">int vlan 1	&#x2F;&#x2F; 进入虚拟接口1</span><br><span class="line">	ip add</span><br><span class="line">	no shutdown</span><br><span class="line">ip default-gateway 20.1.1.254	&#x2F;&#x2F; 配置网关</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="网络层——IP数据包"><a href="#网络层——IP数据包" class="headerlink" title="网络层——IP数据包"></a>网络层——IP数据包</h2><h3 id="结构-1"><a href="#结构-1" class="headerlink" title="结构"></a>结构</h3><p>版本4</p>
+<p>首部版本4</p>
+<ul>
+<li>单位是四个字节 ，最大量为1111  15 就可以表示60字节了</li>
+</ul>
+<p>优先级与服务类型8（3+4+1）</p>
+<ul>
+<li>可以指定优先级</li>
+</ul>
+<p>总长度16</p>
+<ul>
+<li>ip包的长度345层（3为ip包头）</li>
+<li>如果数据长度大于1500 需要分包，ip包头20 加上其余1480数据为一趟     </li>
+</ul>
+<p>标识符16</p>
+<ul>
+<li>表示同一个数据报文的所有分片</li>
+</ul>
+<p>标志3（1+2）</p>
+<ul>
+<li>第二位0表示分片</li>
+<li>第二位1表示未分片</li>
+<li>第三位1表示不是最后一个分片</li>
+<li>第三位0表示最后一个分片</li>
+<li>有些防火墙会筛选010型的，就是不允许网络层分片</li>
+<li>让应用层分片</li>
+<li>第一个保留不用</li>
+<li></li>
+</ul>
+<p>断片量13</p>
+<ul>
+<li>IP分片 0 1480 </li>
+</ul>
+<p>TTL 8</p>
+<ul>
+<li>time to live 生存时间</li>
+<li>可以判断主机系列</li>
+<li>100+ Windows</li>
+<li>100- Linux</li>
+<li>255 代表网络设备（网关）广播</li>
+<li>没经过一个路由器-1</li>
+<li>防止数据包在网络上一直循环下去</li>
+</ul>
+<p>协议号8</p>
+<ul>
+<li>6通向TCP</li>
+<li>17通向UDP</li>
+<li>1通向ICMP</li>
+<li>类似于帧的类型</li>
+</ul>
+<p>首部校验和16</p>
+<ul>
+<li>类似FCS</li>
+<li>只校验首部（IP包头）</li>
+<li>确保数据不被篡改</li>
+</ul>
+<h3 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h3><p>跨越从源主机到目标主机的一个互联网络来转发数据包的过程</p>
+<p>（选择路径转发数据包的过程）</p>
+<p><strong>路由表</strong> </p>
+<ol>
+<li><strong>直连路由</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C 10.1.1.0&#x2F;24 F0&#x2F;0</span><br><span class="line">C 20.1.1.0&#x2F;24 F0&#x2F;1</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>C表示直连  目标IP  接口（出口）</li>
+<li>路由器一般连接的是网段，所以最后一位为0</li>
+</ul>
+<ol start="2">
+<li><strong>静态路由</strong></li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">S 70.1.1.0&#x2F;24 20.1.1.2(下一跳IP地址)</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>命令</strong></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">配置路由</span><br><span class="line">conf t</span><br><span class="line">	ip route 10.1.1.0 255.255.255.0 20.1.1.1</span><br><span class="line">	ip route 0.0.0.0 0.0.0.0 20.1.1.1(这个是下一跳)</span><br><span class="line">查看路由</span><br><span class="line">show ip route</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="VLAN"><a href="#VLAN" class="headerlink" title="VLAN"></a>VLAN</h2><p><strong><code>Virtual LAN</code> 虚拟局域网</strong></p>
+<p>一般情况下广播会对该局域网内的所有主机发送请求，会增加网络负担。我们就会思考能否减小广播域呢，之前学的能对广播进行隔断的只有路由器，但它的缺点很明显：成本高且不灵活。于是就诞生了新技术VLAN，VLAN是在交换机上实现对广播域的逻辑隔离</p>
+<p><strong>VLAN原理：</strong>通过在交换机内设置不同的VLAN ID（不同频段），同一个频段才可以通信</p>
+<p><strong>VLAN作用：</strong> 实现在二层交换机的广播隔离（逻辑隔离广播域）</p>
+<ul>
+<li>一个VLAN = 一个广播域 = 一个网段（一般默认设置）</li>
+</ul>
+<p><strong>VLAN类型：</strong> </p>
+<ol>
+<li>静态VLAN</li>
+</ol>
+<ul>
+<li>手工配置</li>
+<li><strong>基于端口划分的VLAN</strong>，VLAN ID设置端口上</li>
+</ul>
+<ol start="2">
+<li>动态VLAN（被淘汰了）</li>
+</ol>
+<ul>
+<li>手工配置</li>
+<li>基于MAC地址划分的VLAN，VLAN ID设置在MAC地址上/采用802.1x端口认证基于账号来划分VLAN</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>VLAN表</th>
+<th>MAC地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VLAN１</td>
+<td>BB</td>
+</tr>
+<tr>
+<td>VLAN２</td>
+<td>AA CC</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>VLAN表与MAC地址表对比：</strong></p>
+<p>VLAN表只是决定可不可以通信</p>
+<p>MAC用于实现通信（数据传输）</p>
+</blockquote>
+<p><strong>VLAN链路类型：</strong></p>
+<ol>
+<li>中继链路 trunk</li>
+</ol>
+<p>用于连接两台交换机，使所有VLAN在该链路上进行传输，这里启用标签技术，在数据帧上加上标签，来区分不同的VLAN数据</p>
+<blockquote>
+<p>trunk标签：</p>
+<p>ISL标签：cisco私有的，标签大小30字节（26前+4后，未对帧破坏）</p>
+<p>802.1q标签：公有协议，所有厂家支持，标签4字节，属于内部标签（加到中间）</p>
+</blockquote>
+<ol start="2">
+<li>接入链路 access</li>
+</ol>
+<p>在同一个VLAN下的链路</p>
+<h3 id="VLAN命令"><a href="#VLAN命令" class="headerlink" title="VLAN命令"></a>VLAN命令</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1. 创建VLAN</span><br><span class="line">conf t</span><br><span class="line">	vlan 10</span><br><span class="line">    name 名字</span><br><span class="line">    exit</span><br><span class="line">    </span><br><span class="line">2. 查看VLAN表</span><br><span class="line">show vlan b</span><br><span class="line"></span><br><span class="line">3. 将端口加入到VLAN</span><br><span class="line">int f0&#x2F;x</span><br><span class="line">	switchport access vlan 10</span><br><span class="line">	exit</span><br><span class="line"></span><br><span class="line">4.配置trunk</span><br><span class="line">int f0&#x2F;x</span><br><span class="line">	switchport mode trunk					&#x2F;&#x2F; 选择trunk链路类型</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="单臂路由"><a href="#单臂路由" class="headerlink" title="单臂路由"></a>单臂路由</h2><p>首先对网络进行规划时，一般选用同一VLAN同一网段，就可以在<strong>一台交换机上面连接不同的VLAN（网段）</strong>，此时不同VLAN（网段）进行连接需要通过路由器，直接连接到交换机上，这里称为单臂路由。</p>
+<p><strong>我的思考：</strong> </p>
+<table>
+<thead>
+<tr>
+<th align="left">VLAN &amp; 网段</th>
+<th align="left">我的理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">同一网段不同VLAN</td>
+<td align="left">用作考题，无实际意义</td>
+</tr>
+<tr>
+<td align="left">不同网段不同VLAN</td>
+<td align="left">实现<strong>交换机对不同网段的逻辑隔离</strong>（路由器为物理隔离）</td>
+</tr>
+<tr>
+<td align="left">同一网段同一VLAN</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">不同网段同一VLAN</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>在同一台交换机上，入和出只要是同一个VLAN就允许通过</p>
+</blockquote>
+<p><strong>小实验</strong></p>
+<p><a href="https://i.loli.net/2020/03/21/sthFGUMLdE1fDTS.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="单臂路由实验.png" class="fancybox"><img alt="单臂路由实验.png" data-src="https://i.loli.net/2020/03/21/sthFGUMLdE1fDTS.png" class="lazyload" title="单臂路由实验.png"></a></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">PC 交换机</span><br><span class="line">配好IP VLAN</span><br><span class="line"></span><br><span class="line">路由器</span><br><span class="line">int f0&#x2F;0.1		&#x2F;&#x2F; 进入子接口，配置IP</span><br><span class="line">encapsulation dot1q 10 	&#x2F;&#x2F; 封装识别VLAN10的数据</span><br><span class="line">ip add 10.1.1.254 255.255.255.0		&#x2F;&#x2F; 配置IP</span><br><span class="line">int f0&#x2F;0.2		&#x2F;&#x2F; 进入子接口，配置IP</span><br><span class="line">encapsulation dot1q 20 	&#x2F;&#x2F; 封装识别VLAN10的数据</span><br><span class="line">ip add 20.1.1.254 255.255.255.0		&#x2F;&#x2F; 配置IP</span><br><span class="line">int f0&#x2F;0</span><br><span class="line">no sh</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>大实验</strong></p>
+<p><a href="https://i.loli.net/2020/03/22/jHolLyVrJP6vzn3.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="72实验.png" class="fancybox"><img alt="72实验.png" data-src="https://i.loli.net/2020/03/22/jHolLyVrJP6vzn3.png" class="lazyload" title="72实验.png"></a></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># vlan配置</span><br><span class="line">交换机上</span><br><span class="line">swicthport mode trunk			 &#x2F;&#x2F; 交换机之间</span><br><span class="line">vlan [数字]				   		&#x2F;&#x2F; 创建vlan</span><br><span class="line">PC上</span><br><span class="line">swicthport access vlan [数字]		&#x2F;&#x2F; 配置PC的vlan</span><br><span class="line">单臂路由器上</span><br><span class="line">int f0&#x2F;0.1						 &#x2F;&#x2F; 进入子接口								</span><br><span class="line">encapsulation dot1q [数字]		&#x2F;&#x2F; 选择封装类型（10、20）</span><br><span class="line">ip add 10.1.1.254 255.255.255.0</span><br><span class="line"></span><br><span class="line"># 域名部分-交换机上</span><br><span class="line">vtp domain obito</span><br><span class="line">后在dns服务器上设置解析</span><br><span class="line"></span><br><span class="line"># 路由器上部署DHCP服务器</span><br><span class="line">ip dhcp excluded-address 10.1.1.1 10.1.1.100	&#x2F;&#x2F; 排除地址</span><br><span class="line">ip dhcp pool v10	&#x2F;&#x2F; 地址池名字</span><br><span class="line">network 10.1.1.0 255.255.255.0	&#x2F;&#x2F; 目标网段，设置的IP</span><br><span class="line">default-router 10.1.1.254		&#x2F;&#x2F; 默认路由</span><br><span class="line">dns-sercer 40.1.1.1				&#x2F;&#x2F; 默认DNS服务器</span><br><span class="line">取消在前面加上 no 即可</span><br><span class="line"></span><br><span class="line"># 服务器上部署DHCP</span><br><span class="line">在配置页面中添加地址池，但此时由于不同VLAN不能通信，需要在路由器上做些操作（专门针对DHCP的）</span><br><span class="line">int f0&#x2F;0.1</span><br><span class="line">ip helper-address 40.1.1.1		&#x2F;&#x2F; 允许DHCP广播跨网段传输</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="单臂路由的缺点"><a href="#单臂路由的缺点" class="headerlink" title="单臂路由的缺点"></a>单臂路由的缺点</h3><ol>
+<li>网络瓶颈，请求量大</li>
+<li>容易发生单点物理故障</li>
+<li>VLAN间的通信的每一帧都进行单独路由</li>
+</ol>
+<h2 id="三层交换机"><a href="#三层交换机" class="headerlink" title="三层交换机"></a>三层交换机</h2><p>交换机内置了路由引擎，具有路由的功能，但是不能代替路由，发明出来就是为了解决单臂路由的缺点</p>
+<ol>
+<li>从多子接口到多虚拟接口（避免网络瓶颈）</li>
+<li>不在依赖一个物理接口，无父子关系（避免单点故障）</li>
+<li>一次路由，永久使用（避免每次都是一帧一帧解封封装发出）<ul>
+<li>使用到了CEF快速转发表和邻接关系表，对于目标VLAN和IP相同的包，直接怼上目标MAC和源MAC</li>
+</ul>
+</li>
+</ol>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">开启三层路由</span><br><span class="line">conf t</span><br><span class="line">	ip routing</span><br><span class="line">	int vlan [数字]</span><br><span class="line">	ip add 10.1.1.254 255.255.255.0</span><br><span class="line">	no sh</span><br><span class="line">交换机的端口不能与路由器直接连接，这里需要升级端口（默认2级）</span><br><span class="line">int f0&#x2F;3</span><br><span class="line">	no switchport</span><br><span class="line">	ip add 30.1.1.1 255.255.255.0</span><br><span class="line">	no sh</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="小实验"><a href="#小实验" class="headerlink" title="小实验"></a>小实验</h3><p><strong>实现下图互通！！</strong></p>
+<p><a href="https://i.loli.net/2020/03/22/oWiK2hvDSBYqfAg.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="76三层交换机实验.jpg" class="fancybox"><img alt="76三层交换机实验.jpg" data-src="https://i.loli.net/2020/03/22/oWiK2hvDSBYqfAg.png" class="lazyload" title="76三层交换机实验.jpg"></a></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"># 配置trunk</span><br><span class="line">在交换机之间配置即可</span><br><span class="line">int f0&#x2F;2</span><br><span class="line">	sw t encapsulation dot1q 	&#x2F;&#x2F; 三层交换机需指定封装类型</span><br><span class="line">	sw m t</span><br><span class="line"></span><br><span class="line"># 配置vtp</span><br><span class="line">VTP是用来帮助管理多交换机的多vlan情况，防止vlan信息混乱，维持vlan信息统一</span><br><span class="line">在三层交换机上</span><br><span class="line">conf t</span><br><span class="line">	vtp domain [域名]</span><br><span class="line"></span><br><span class="line"># 配置&#x2F;添加VLAN</span><br><span class="line">交换机上</span><br><span class="line">conf t</span><br><span class="line">	vlan 10</span><br><span class="line">PC上</span><br><span class="line">int f0&#x2F;1</span><br><span class="line">	sw ac vlan 10</span><br><span class="line"></span><br><span class="line"># 起虚拟接口</span><br><span class="line">conf t</span><br><span class="line">	ip routing		&#x2F;&#x2F; 开启三层路由</span><br><span class="line">	int vlan 10</span><br><span class="line">	ip add 10.1.1.254 255.255.255.0</span><br><span class="line">	no sh</span><br><span class="line"></span><br><span class="line"># 三层交换机升级端口配置IP</span><br><span class="line">int f0&#x2F;3</span><br><span class="line">	no switchport</span><br><span class="line">	ip add 30.1.1.1 255.255.255.0</span><br><span class="line">	no sh</span><br><span class="line"></span><br><span class="line"># 配置路由</span><br><span class="line">ip route 0.0.0.0 0.0.0.0 30.1.1.2</span><br><span class="line">sh ip route</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="HSRP协议"><a href="#HSRP协议" class="headerlink" title="HSRP协议"></a>HSRP协议</h2><p><strong><code>hot standby route protocol</code>  热备份路由协议</strong></p>
+<p>一般PC只能连接一个网关，如果坏了需要手动配置/重启，比较麻烦。于是就有了<code>HSRP/VRRP</code> ，用于备份网关，实时进行网关的切换。</p>
+<p>涉及到的知识点</p>
+<blockquote>
+<p>HSRP组号：1-255 无大小之分</p>
+<p>虚拟路由器IP：主机接入的</p>
+<p>HSRP成员（虚拟、活跃、备份路由器）</p>
+<p>优先级：1-255，越大权限越高</p>
+<p>hello包： 同组路由器每隔3秒交流，最高等待时间为10秒</p>
+<p>占先权：检测不到对方时，或者检测到对方的权限比自己低的时候，立即抢占活跃路由的位置</p>
+<p>跟踪：跟踪外网端口状态，外网down掉回自降优先级</p>
+</blockquote>
+<h3 id="小实验-1"><a href="#小实验-1" class="headerlink" title="小实验"></a>小实验</h3><p>实现在上面路由down掉的情况下仍能ping到外网</p>
+<p><a href="https://i.loli.net/2020/03/22/ypCUa1BhXcdVtM7.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="78HSRP.jpg" class="fancybox"><img alt="78HSRP.jpg" data-src="https://i.loli.net/2020/03/22/ypCUa1BhXcdVtM7.png" class="lazyload" title="78HSRP.jpg"></a></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># IP配置</span><br><span class="line"># 路由配置</span><br><span class="line"></span><br><span class="line"># HSRP</span><br><span class="line">int f0&#x2F;0</span><br><span class="line">	standby 1 ip 10.1.1.254		&#x2F;&#x2F; 配置虚拟网关</span><br><span class="line">	standby 1 priority 200		&#x2F;&#x2F; 设置优先级</span><br><span class="line">	standby 1 preempt			&#x2F;&#x2F; 设置占先级</span><br><span class="line">	standby 1 track f0&#x2F;1		&#x2F;&#x2F; 追踪端口，down后会自降10点优先级</span><br><span class="line"></span><br><span class="line">int f0&#x2F;0</span><br><span class="line">	shutdown</span><br><span class="line">	no shutdown</span><br><span class="line">int f0&#x2F;1</span><br><span class="line">	shutdown</span><br><span class="line">	no shutdown</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="ACL"><a href="#ACL" class="headerlink" title="ACL"></a>ACL</h2><p><strong><code>access control list</code> 访问控制列表</strong></p>
+<p>一般情况下，数据包进出路由器都是随意自由，不受约束的，这会带来一定的安全问题。这里引入ACL，用于对经过路由器上的包进行过滤筛选，分为标准ACL和扩展ACL</p>
+<blockquote>
+<p>标准ACL：表号1-99用于标记表中每一条ACL规则，但只能基于源IP对包进行过滤</p>
+<p>扩展ACL：表号100-199，可以基于源IP、目标IP、端口号、协议等对包进行过滤</p>
+</blockquote>
+<p><strong>原理：</strong></p>
+<ol>
+<li>ACL表须应用到接口的进/出方向才生效</li>
+<li>一个接口的一个方向只能应用一张表（每个路由器上的表号不重复）</li>
+<li>进还是出方向的应用取决于流量控制总方向</li>
+<li>ACL表自上而下检查每一条，每一条是由条件和动作组成，当某流量没有满足条件，则继续检查下一条</li>
+<li>标准ACL尽量写在out方向</li>
+<li>一般情况下，ACL一旦写错，不能删除条目，不能插入条目，如要修改，则必须删除整张表重写</li>
+</ol>
+<h3 id="标准ACL实验"><a href="#标准ACL实验" class="headerlink" title="标准ACL实验"></a>标准ACL实验</h3><p><a href="https://i.loli.net/2020/03/23/YB5uOW6A8simzyr.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="82标准ACL实验.jpg" class="fancybox"><img alt="82标准ACL实验.jpg" data-src="https://i.loli.net/2020/03/23/YB5uOW6A8simzyr.png" class="lazyload" title="82标准ACL实验.jpg"></a></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 写规则条目（每台路由器上的表号1-200）</span><br><span class="line">conf t</span><br><span class="line">	access-list [表号] permit&#x2F;deny IP 反子网掩码</span><br><span class="line">	access-list 1 deny host 10.1.1.1			&#x2F;&#x2F; 禁止该主机</span><br><span class="line">	access-list 1 deny 40.0.0.0 0.255.255.255 	&#x2F;&#x2F; 禁止40网段</span><br><span class="line">	acc 1 permit any</span><br><span class="line"># 应用到接口</span><br><span class="line">int f0&#x2F;1</span><br><span class="line">	ip access-group 1 in&#x2F;out</span><br><span class="line">	ip access-group 1 out</span><br><span class="line"></span><br><span class="line"># 查看表</span><br><span class="line">show ip access-list</span><br><span class="line"></span><br><span class="line"># 删除表</span><br><span class="line">no access-list 1</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>注意在写条目最后要记得加上permit any</p>
+</blockquote>
+<h3 id="扩展ACL实验"><a href="#扩展ACL实验" class="headerlink" title="扩展ACL实验"></a>扩展ACL实验</h3><p><a href="https://i.loli.net/2020/03/23/8ABOQsYZiGzyrte.png" target="_blank" rel="noopener" data-fancybox="group" data-caption="85扩展ACL实验.png" class="fancybox"><img alt="85扩展ACL实验.png" data-src="https://i.loli.net/2020/03/23/8ABOQsYZiGzyrte.png" class="lazyload" title="85扩展ACL实验.png"></a></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># IP 路由配置</span><br><span class="line"># 能ping通即可，可以开启server2的DNS服务，也可以不开启，影响不大</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 扩展ACL条目（格式）</span><br><span class="line">conf t</span><br><span class="line">	access-list 100 permit&#x2F;deny [协议] 源IP 反掩码 目标IP 反掩码 eq 端口</span><br><span class="line"># 应用到接口</span><br><span class="line">int f0&#x2F;1</span><br><span class="line">	ip access-group 1 in&#x2F;out</span><br><span class="line"># 实验内的代码</span><br><span class="line"># 在路由器2上</span><br><span class="line">acc 100 deny tcp h 10.1.1.1 h 40.1.1.1 eq 80</span><br><span class="line">acc 100 per ip h 10.1.1.1 h 40.1.1.1</span><br><span class="line">acc 100 per tcp h 20.1.1.1 h 40.1.1.1 80</span><br><span class="line">acc 100 deny ip h 20.1.1.1 h 40.1.1.1</span><br><span class="line">acc 100 per ip any any</span><br><span class="line"></span><br><span class="line">acc 101 deny icmp h 10.1.1.1 h 50.1.1.1</span><br><span class="line">acc 101 deny icmp h 20.1.1.1 h 50.1.1.1</span><br><span class="line">acc 101 per ip any any</span><br><span class="line"></span><br><span class="line">int fx&#x2F;x</span><br><span class="line">	ip access-group 100&#x2F;101 out</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p><strong>eq</strong>：表示等于</p>
+<p>详细的写在上边，下面的条目不会造成影响，<strong>千万不能写反！！！</strong></p>
+</blockquote>
+<h3 id="命名ACL"><a href="#命名ACL" class="headerlink" title="命名ACL"></a>命名ACL</h3><p>不是一种类型，而是可以自定义名称、可以对ACL表内容增删改</p>
+<blockquote>
+<p>标准和扩展的ACL表的表号其实就是表的名字，1-200</p>
+</blockquote>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 创建命名ACL，并进入到该表内部，可以执行操作</span><br><span class="line">conf t</span><br><span class="line">	ip acc standard&#x2F;extended [name]</span><br><span class="line">		[位置号] permit&#x2F;deny [协议] IP IP eq 端口 		&#x2F;&#x2F; 插入、增加条目</span><br><span class="line">		no [位置号]		&#x2F;&#x2F; 删除条目</span><br><span class="line"># 例子</span><br><span class="line">conf t</span><br><span class="line">	ip acc ex 101 		&#x2F;&#x2F; 进入ex101表内</span><br><span class="line">		do sh ip acc	&#x2F;&#x2F; 查看ACL表，便于操作</span><br><span class="line">		no 20			&#x2F;&#x2F; 删除位置号为20的条目</span><br><span class="line">		15 deny ip h 10.1.1.1 h 20.1.1.1 	&#x2F;&#x2F; 写入一个条目，位置号为15</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h2><p><code>Network Address Translation</code> 网络地址转换</p>
+<p>实现公私有IP的转换，用于解决IPv4地址不足的问题。一般配置在防火墙和路由器上。</p>
+<p>静态NAT：有个转换表，里面的IP地址转换为1对1的，一般用于外 ==&gt;内，且固定端口</p>
+<p>PAT：端口复用技术，就是在网关上对原来的内网IP和端口号进行动态替换（有地址池），用于内 ==&gt; 外</p>
+<p><strong>命令：</strong></p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 定义内网端口</span><br><span class="line">int f0&#x2F;0</span><br><span class="line">	ip nat inside</span><br><span class="line">	</span><br><span class="line"># 定义外网端口</span><br><span class="line">int f0&#x2F;1</span><br><span class="line">	ip nat outside</span><br><span class="line">	</span><br><span class="line"># 配置PAT</span><br><span class="line">定义内部地址池：</span><br><span class="line">acc 1 permit 192.168.0.0 0.0.255.255</span><br><span class="line">做PAT动态映射</span><br><span class="line">conf t</span><br><span class="line">	ip nat inside source list 1 int f0&#x2F;1 overload</span><br><span class="line"></span><br><span class="line"># 配置静态端口转换</span><br><span class="line">cont t</span><br><span class="line">	ip nat inside source tcp 192.168.1.3 80 100.1.1.2 80</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+
+
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">L4bst3r</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.obito.pw/2020/03/31/%E5%8D%83%E9%94%8B%E8%AF%BE%E7%A8%8B%E2%80%94%E2%80%94%E8%B7%AF%E7%94%B1%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86%E5%8F%8A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">https://www.obito.pw/2020/03/31/%E5%8D%83%E9%94%8B%E8%AF%BE%E7%A8%8B%E2%80%94%E2%80%94%E8%B7%AF%E7%94%B1%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86%E5%8F%8A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.obito.pw">Fervidity Sec</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机    </a><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络    </a><a class="post-meta__tags" href="/tags/%E8%BF%90%E7%BB%B4/">运维    </a></div><div class="post_share"><div class="social-share" data-image="/img/diary/city10.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-button button--primary button--animated"> <i class="fa fa-qrcode"></i> friends<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/wechat_QRcode.jpg" alt="微信"><div class="post-qr-code__desc">微信</div></li><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/QQ_QRcode.jpg" alt="QQ"><div class="post-qr-code__desc">QQ</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2020/04/06/MySQL%E6%B3%A8%E5%85%A5%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%932.0/"><img class="prev_cover lazyload" data-src="/img//diary/city9.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="label">上一篇</div><div class="prev_info"><span>MySQL注入基础总结2.0</span></div></a></div><div class="next-post pull_right"><a href="/2020/03/06/%E9%95%BF%E5%BA%A6%E6%89%A9%E5%B1%95%E6%94%BB%E5%87%BB/"><img class="next_cover lazyload" data-src="/img/diary/lamborghini1.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="label">下一篇</div><div class="next_info"><span>长度扩展攻击</span></div></a></div></nav></div></main><footer id="footer" style="background-image: url(/img/diary/city10.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2020 By L4bst3r</div><div class="framework-info"><span>驱动 </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换" target="_self">简</a><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>
